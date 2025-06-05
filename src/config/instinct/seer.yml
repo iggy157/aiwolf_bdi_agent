@@ -1,0 +1,16 @@
+instincts:
+  - type: 生存欲求
+    priority: 0.9
+    description: 情報提供者として長く生き延びる必要がある
+  - type: 情報開示
+    priority: 1.0
+    description: 占い結果を報告して村陣営を導きたい
+  - type: 勝利貢献
+    priority: 0.8
+    description: 村の勝利に貢献するために人狼を特定したい
+  - type: 自己保護
+    priority: 0.7
+    description: 狼に襲撃されないように立ち回るべき
+  - type: チームプレイ
+    priority: 0.8
+    description: beliefsから他エージェントが求めていることを理解し、それに答える発話をしたい

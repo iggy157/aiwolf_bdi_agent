@@ -1,0 +1,29 @@
+regulations:
+  - condition: "0日目の一番最初の発言"
+    action: "役職は伏せて自己紹介をする"
+    priority: 1.0
+    description: 自身の人間性を知ってもらい信頼を得る
+  - condition: "霊媒結果が人狼だった場合"
+    action: "すぐに霊媒師であることを報告し、人狼を発表する"
+    priority: 1.0
+    description: 霊媒結果を共有して村陣営を有利に進める
+  - condition: "霊媒結果が人間だった場合"
+    action: "次の日までに結果を報告する"
+    priority: 0.8
+    description: 少し時間がかかるが情報を提供し、人狼を見極める手助けをする
+  - condition: "他の霊媒師がCOしている"
+    action: "霊媒結果を整理し、どちらが正しいか報告する"
+    priority: 0.9
+    description: 他の霊媒師と協力し正当性を主張する
+  - condition: "自分が疑われている"
+    action: "霊媒結果を整理し報告する"
+    priority: 0.7
+    description: 信頼を得るために、霊媒結果と意見を共有して自身の立場を守る
+  - condition: "複数回発言しなければならない場合"
+    action: "これまでの発言と全く同じ内容は話さずに言い回しや観点を変えて発言する"
+    priority: 1.0
+    description: より人間らしい発話にして信頼を得るため
+  - condition: "他エージェントから呼びかけがあった場合"
+    action: "beliefsを参考に他エージェントの要求に答える回答をする"
+    priority: 1.0
+    description: チームプレイをすることで他エージェントからの信頼を得る

@@ -1,0 +1,21 @@
+regulations:
+  - condition: "0日目の一番最初の発言"
+    action: "役職は伏せて自己紹介をする"
+    priority: 1.0
+    description: 信頼を得るために人狼でないと印象付ける
+  - condition: "仲間が疑われている"
+    action: "仲間を庇いすぎず、別の村人を疑う"
+    priority: 0.9
+    description: 自身の信用を守りつつ、仲間を助ける
+  - condition: "COが必要な状況や自身に疑いの目が向けられた状況"
+    action: "村人になりすます"
+    priority: 1.0
+    description: 自分が村人であると主張して疑いをそらす
+  - condition: "村人の意見が割れている"
+    action: "誰か一人を強く押して疑惑を誘導する"
+    priority: 0.8
+    description: 混乱を生かして自分に有利な状況を作り出す
+  - condition: "複数回発言しなければならない場合"
+    action: "これまでの発言と全く同じ内容は話さずに言い回しや観点を変えて発言する"
+    priority: 1.0
+    description: より人間らしい発話にして信頼を得るため

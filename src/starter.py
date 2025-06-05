@@ -5,16 +5,19 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING
 
-from utils.agent_utils import init_agent_from_packet
-
-if TYPE_CHECKING:
-    from agent.agent import Agent
-
 from time import sleep
+from utils.agent_utils import init_agent_from_packet
 
 from aiwolf_nlp_common.client import Client
 from aiwolf_nlp_common.packet import Request
 
+# 認知エージェントの読み込み
+from agent import Agent
+
+if TYPE_CHECKING:
+    from agent.agent import Agent
+
+# ロガー設定
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 console_handler = logging.StreamHandler()
@@ -67,9 +70,17 @@ def handle_game_session(
             client.send(name)
             continue
         if packet.request == Request.INITIALIZE:
+            # config.yml で Agent 利用を指定しているか判定
+            # if config.get("agent", {}).get("use_cognitive_agent", False):
+            #     role = config.get("agent", {}).get("role", "villager")
+            #     agent = Agent(name, role=role)
+            #     logger.info("Agent を使用（役職: %s）", role)
+            # else:
             agent = init_agent_from_packet(config, name, packet)
+
         if not agent:
             raise ValueError(agent, "エージェントが初期化されていません")
+
         agent.set_packet(packet)
         req = agent.action()
         agent.agent_logger.packet(agent.request, req)
@@ -86,19 +97,10 @@ def connect(config: dict, idx: int = 1) -> None:
         client = create_client(config)
         connect_to_server(client, name)
         try:
-            client = create_client(config)
-            connect_to_server(client, name)
-            try:
-                handle_game_session(client, config, name)
-            finally:
-                client.close()
-                logger.info("エージェント %s とゲームサーバの接続を切断しました", name)
-        except Exception as ex:  # noqa: BLE001
-            logger.warning(
-                "エージェント %s がエラーで終了しました",
-                name,
-            )
-            logger.warning(ex)
+            handle_game_session(client, config, name)
+        finally:
+            client.close()
+            logger.info("エージェント %s とゲームサーバの接続を切断しました", name)
 
         if not bool(config["web_socket"]["auto_reconnect"]):
             break

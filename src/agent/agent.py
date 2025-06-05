@@ -1,4 +1,4 @@
-"""エージェントの基底クラスを定義するモジュール."""
+"""エージェントの基底クラスと認知アーキテクチャ対応エージェントを定義するモジュール."""
 
 from __future__ import annotations
 
@@ -25,6 +25,12 @@ from aiwolf_nlp_common.packet import Info, Packet, Request, Role, Setting, Statu
 from utils.agent_logger import AgentLogger
 from utils.stoppable_thread import StoppableThread
 
+from cognitive.belief_generator import BeliefGenerator
+from cognitive.desire_generator import DesireGenerator
+from cognitive.intention_generator import IntentionGenerator
+from cognitive.speech_generator import SpeechGenerator
+from cognitive.model_types import Belief, Desire, Intention
+
 if TYPE_CHECKING:
     from collections.abc import Callable
 
@@ -39,7 +45,6 @@ class Agent:
         game_id: str,
         role: Role,
     ) -> None:
-        """エージェントの初期化を行う."""
         self.config = config
         self.agent_name = name
         self.agent_logger = AgentLogger(config, name, game_id)
@@ -55,20 +60,30 @@ class Agent:
         self.llm_model: BaseChatModel | None = None
         self.llm_message_history: list[BaseMessage] = []
 
-        load_dotenv(Path(__file__).parent.joinpath("./../../config/.env"))
+        # 認知モデル
+        self.belief_generator: BeliefGenerator | None = None
+        self.desire_generator: DesireGenerator | None = None
+        self.intention_generator: IntentionGenerator | None = None
+        self.speech_generator: SpeechGenerator | None = None
+
+        self.status_map: dict[str, Status] = {}  # status_mapをここで初期
+
+        self.beliefs: list[Belief] = []
+        self.desires: list[Desire] = []
+        self.intentions: list[Intention] = []
+
+        load_dotenv(Path(__file__).parent.joinpath("./../config/.env"))
 
     @staticmethod
     def timeout(func: Callable) -> Callable:
-        """アクションタイムアウトを設定するデコレータ."""
-
-        def _wrapper(self, *args, **kwargs) -> str:  # noqa: ANN001, ANN002, ANN003
+        def _wrapper(self, *args, **kwargs) -> str:
             res = ""
 
             def execute_with_timeout() -> None:
                 nonlocal res
                 try:
                     res = func(self, *args, **kwargs)
-                except Exception as e:  # noqa: BLE001
+                except Exception as e:
                     res = e
 
             thread = StoppableThread(target=execute_with_timeout)
@@ -81,16 +96,10 @@ class Agent:
             if timeout_value > 0:
                 thread.join(timeout=timeout_value)
                 if thread.is_alive():
-                    self.agent_logger.logger.warning(
-                        "アクションがタイムアウトしました: %s",
-                        self.request,
-                    )
+                    self.agent_logger.logger.warning("アクションがタイムアウトしました: %s", self.request)
                     if bool(self.config["agent"]["kill_on_timeout"]):
                         thread.stop()
-                        self.agent_logger.logger.warning(
-                            "アクションを強制終了しました: %s",
-                            self.request,
-                        )
+                        self.agent_logger.logger.warning("アクションを強制終了しました: %s", self.request)
             else:
                 thread.join()
             if isinstance(res, Exception):
@@ -100,7 +109,6 @@ class Agent:
         return _wrapper
 
     def set_packet(self, packet: Packet) -> None:
-        """パケット情報をセットする."""
         self.request = packet.request
         if packet.info:
             self.info = packet.info
@@ -111,13 +119,12 @@ class Agent:
         if packet.whisper_history:
             self.whisper_history.extend(packet.whisper_history)
         if self.request == Request.INITIALIZE:
-            self.talk_history: list[Talk] = []
-            self.whisper_history: list[Talk] = []
-            self.llm_message_history: list[BaseMessage] = []
+            self.talk_history = []
+            self.whisper_history = []
+            self.llm_message_history = []
         self.agent_logger.logger.debug(packet)
 
     def get_alive_agents(self) -> list[str]:
-        """生存しているエージェントのリストを取得する."""
         if not self.info:
             return []
         return [k for k, v in self.info.status_map.items() if v == Status.ALIVE]
@@ -148,9 +155,7 @@ class Agent:
             self.llm_message_history.append(HumanMessage(content=prompt))
             response = self.llm_model.invoke(self.llm_message_history)
             response_content = (
-                response.content
-                if isinstance(response.content, str)
-                else str(response.content[0])
+                response.content if isinstance(response.content, str) else str(response.content[0])
             )
             self.llm_message_history.append(AIMessage(content=response_content))
             self.agent_logger.logger.info(["LLM", prompt, response_content])
@@ -162,14 +167,11 @@ class Agent:
 
     @timeout
     def name(self) -> str:
-        """名前リクエストに対する応答を返す."""
         return self.agent_name
 
     def initialize(self) -> None:
-        """ゲーム開始リクエストに対する初期化処理を行う."""
         if self.config is None or self.info is None:
             return
-
         model_type = str(self.config["llm"]["type"])
         match model_type:
             case "openai":
@@ -195,55 +197,69 @@ class Agent:
         self._send_message_to_llm(self.request)
 
     def daily_initialize(self) -> None:
-        """昼開始リクエストに対する処理を行う."""
         self._send_message_to_llm(self.request)
 
+    def day_start(self) -> None:
+        self.belief_generator = BeliefGenerator(self)
+        self.desire_generator = DesireGenerator(self)
+        self.intention_generator = IntentionGenerator(self)
+        self.speech_generator = SpeechGenerator(self)
+
+        try:
+            self.beliefs = self.belief_generator.generate_beliefs()
+        except Exception as e:
+            self.agent_logger.logger.error(f"Belief generation failed: {e}")
+            self.beliefs = []
+
+        try:
+            self.desires = self.desire_generator.generate_desires(self.beliefs)
+        except Exception as e:
+            self.agent_logger.logger.error(f"Desire generation failed: {e}")
+            self.desires = []
+
+        try:
+            self.intentions = self.intention_generator.generate_intentions(self.beliefs, self.desires)
+        except Exception as e:
+            self.agent_logger.logger.error(f"Intention generation failed: {e}")
+            self.intentions = []
+
+    def talk(self) -> str:
+        if self.speech_generator is None:
+            self.speech_generator = SpeechGenerator(self)
+        try:
+            return self.speech_generator.generate_speech(self.beliefs, self.desires, self.intentions)
+        except Exception as e:
+            self.agent_logger.logger.error(f"Speech generation failed: {e}")
+            return ""
+
+    def vote(self) -> str | int:
+        for intention in self.intentions:
+            if intention.action_type.lower() == "vote" and intention.target_agent is not None:
+                return intention.target_agent
+        return random.choice(self.get_alive_agents())
+
     def whisper(self) -> str:
-        """囁きリクエストに対する応答を返す."""
         response = self._send_message_to_llm(self.request)
         self.sent_whisper_count = len(self.whisper_history)
         return response or ""
 
-    def talk(self) -> str:
-        """トークリクエストに対する応答を返す."""
-        response = self._send_message_to_llm(self.request)
-        self.sent_talk_count = len(self.talk_history)
-        return response or ""
-
     def daily_finish(self) -> None:
-        """昼終了リクエストに対する処理を行う."""
         self._send_message_to_llm(self.request)
 
     def divine(self) -> str:
-        """占いリクエストに対する応答を返す."""
-        return self._send_message_to_llm(self.request) or random.choice(  # noqa: S311
-            self.get_alive_agents(),
-        )
+        return self._send_message_to_llm(self.request) or random.choice(self.get_alive_agents())
 
     def guard(self) -> str:
-        """護衛リクエストに対する応答を返す."""
-        return self._send_message_to_llm(self.request) or random.choice(  # noqa: S311
-            self.get_alive_agents(),
-        )
-
-    def vote(self) -> str:
-        """投票リクエストに対する応答を返す."""
-        return self._send_message_to_llm(self.request) or random.choice(  # noqa: S311
-            self.get_alive_agents(),
-        )
+        return self._send_message_to_llm(self.request) or random.choice(self.get_alive_agents())
 
     def attack(self) -> str:
-        """襲撃リクエストに対する応答を返す."""
-        return self._send_message_to_llm(self.request) or random.choice(  # noqa: S311
-            self.get_alive_agents(),
-        )
+        return self._send_message_to_llm(self.request) or random.choice(self.get_alive_agents())
 
     def finish(self) -> None:
-        """ゲーム終了リクエストに対する処理を行う."""
+        pass
 
     @timeout
-    def action(self) -> str | None:  # noqa: C901, PLR0911
-        """リクエストの種類に応じたアクションを実行する."""
+    def action(self) -> str | None:
         match self.request:
             case Request.NAME:
                 return self.name()
@@ -267,4 +283,6 @@ class Agent:
                 self.daily_finish()
             case Request.FINISH:
                 self.finish()
+            case Request.DAY_START:
+                self.day_start()
         return None

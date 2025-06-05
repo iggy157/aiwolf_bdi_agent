@@ -1,0 +1,71 @@
+.
+├── LICENSE
+├── README.md
+├── aiwolf-nlp-server-linux-amd64
+├── aiwolf-nlp-server-windows-amd64.exe
+├── config
+│   ├── config.yml
+│   └── config.yml.example
+├── default_5.yml
+├── log
+│   ├── 1746683993_kanolab.json
+│   ├── 1746683993_kanolab.log
+│   ├── 1746684128_kanolab.json
+│   ├── 1746684128_kanolab.log
+│   ├── 20250508145953586000
+│   │   ├── kanolab1.log
+│   │   ├── kanolab2.log
+│   │   ├── kanolab3.log
+│   │   ├── kanolab4.log
+│   │   └── kanolab5.log
+│   └── 20250508150208037000
+│       ├── kanolab1.log
+│       ├── kanolab2.log
+│       ├── kanolab3.log
+│       ├── kanolab4.log
+│       └── kanolab5.log
+├── output.txt
+├── pyproject.toml
+├── ruff.toml
+├── src
+│   ├── __pycache__
+│   │   └── starter.cpython-311.pyc
+│   ├── agent
+│   │   ├── __init__.py
+│   │   ├── __pycache__
+│   │   │   ├── __init__.cpython-311.pyc
+│   │   │   ├── agent.cpython-311.pyc
+│   │   │   ├── bodyguard.cpython-311.pyc
+│   │   │   ├── medium.cpython-311.pyc
+│   │   │   ├── possessed.cpython-311.pyc
+│   │   │   ├── seer.cpython-311.pyc
+│   │   │   ├── villager.cpython-311.pyc
+│   │   │   └── werewolf.cpython-311.pyc
+│   │   ├── agent.py
+│   │   ├── bodyguard.py
+│   │   ├── medium.py
+│   │   ├── possessed.py
+│   │   ├── seer.py
+│   │   ├── villager.py
+│   │   └── werewolf.py
+│   ├── aiwolf_nlp_agent_llm.egg-info
+│   │   ├── PKG-INFO
+│   │   ├── SOURCES.txt
+│   │   ├── dependency_links.txt
+│   │   ├── requires.txt
+│   │   └── top_level.txt
+│   ├── main.py
+│   ├── starter.py
+│   └── utils
+│       ├── __init__.py
+│       ├── __pycache__
+│       │   ├── __init__.cpython-311.pyc
+│       │   ├── agent_logger.cpython-311.pyc
+│       │   ├── agent_utils.cpython-311.pyc
+│       │   └── stoppable_thread.cpython-311.pyc
+│       ├── agent_logger.py
+│       ├── agent_utils.py
+│       └── stoppable_thread.py
+└── uv.lock
+
+11 directories, 57 files

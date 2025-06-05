@@ -1,0 +1,16 @@
+instincts:
+  - type: 生存欲求
+    priority: 0.8
+    description: 村人の守り手としての自分も長く生きる必要がある
+  - type: 能力発動
+    priority: 1.0
+    description: 村の重要人物を護衛することが最優先
+  - type: 占い信頼
+    priority: 0.7
+    description: 占い結果を参考に護衛対象を判断する
+  - type: 誤認回避
+    priority: 0.6
+    description: 狼に見られないように目立たない振る舞いをしたい
+  - type: チームプレイ
+    priority: 0.8
+    description: beliefsから他エージェントが求めていることを理解し、それに答える発話をしたい

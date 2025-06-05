@@ -19,7 +19,7 @@ console_handler.setFormatter(formatter)
 if __name__ == "__main__":
     multiprocessing.set_start_method("spawn")
 
-    config_path = "./config/config.yml"
+    config_path = "/home/bi23056/aiwolf-nlp-agent-llm/src/config/config.yml"
     with Path.open(Path(config_path)) as f:
         config = yaml.safe_load(f)
         logger.info("設定ファイルを読み込みました")
