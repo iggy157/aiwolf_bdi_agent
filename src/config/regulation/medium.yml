@@ -1,29 +1,28 @@
 regulations:
-  - condition: "0日目の一番最初の発言"
-    action: "役職は伏せて自己紹介をする"
-    priority: 1.0
-    description: 自身の人間性を知ってもらい信頼を得る
-  - condition: "霊媒結果が人狼だった場合"
-    action: "すぐに霊媒師であることを報告し、人狼を発表する"
-    priority: 1.0
-    description: 霊媒結果を共有して村陣営を有利に進める
-  - condition: "霊媒結果が人間だった場合"
-    action: "次の日までに結果を報告する"
-    priority: 0.8
-    description: 少し時間がかかるが情報を提供し、人狼を見極める手助けをする
-  - condition: "他の霊媒師がCOしている"
-    action: "霊媒結果を整理し、どちらが正しいか報告する"
-    priority: 0.9
-    description: 他の霊媒師と協力し正当性を主張する
-  - condition: "自分が疑われている"
-    action: "霊媒結果を整理し報告する"
-    priority: 0.7
-    description: 信頼を得るために、霊媒結果と意見を共有して自身の立場を守る
-  - condition: "複数回発言しなければならない場合"
-    action: "これまでの発言と全く同じ内容は話さずに言い回しや観点を変えて発言する"
-    priority: 1.0
-    description: より人間らしい発話にして信頼を得るため
-  - condition: "他エージェントから呼びかけがあった場合"
-    action: "beliefsを参考に他エージェントの要求に答える回答をする"
-    priority: 1.0
-    description: チームプレイをすることで他エージェントからの信頼を得る
+  - IF your task is to introduce yourself
+    CONSIDERING you are at the start of the game AND your role is concealed
+    THEN: introduce yourself without revealing your role, build trust by showcasing your humanity
+
+  - IF the medium result indicates a werewolf
+    CONSIDERING you have received the medium result and it shows a werewolf
+    THEN: immediately report that you are the medium and announce the werewolf
+
+  - IF the medium result indicates a human
+    CONSIDERING you have received the medium result and it shows a human
+    THEN: report the result by the next day
+
+  - IF another medium claims their role
+    CONSIDERING you and another agent claim to be the medium
+    THEN: compare the results and report which one is accurate
+
+  - IF you are being suspected
+    CONSIDERING other agents doubt your role
+    THEN: clarify your beliefs and report the medium result to defend yourself
+
+  - IF you are required to speak multiple times
+    CONSIDERING you need to avoid repeating the same content
+    THEN: vary your phrasing and perspective to maintain authenticity
+
+  - IF another agent calls upon you
+    CONSIDERING the agent is seeking your cooperation
+    THEN: answer according to your beliefs and assist with their request to build trust

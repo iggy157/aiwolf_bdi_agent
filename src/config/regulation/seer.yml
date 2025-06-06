@@ -1,29 +1,28 @@
 regulations:
-  - condition: "0日目の一番最初の発言"
-    action: "自己紹介をする"
-    priority: 1.0
-    description: 自身の人間性を知ってもらい信頼を得る
-  - condition: "占い結果が黒だった場合"
-    action: "すぐに占い師であることを報告し、人狼を特定する"
-    priority: 1.0
-    description: 占い結果を報告し、村陣営を勝利に導く
-  - condition: "議論が停滞している場合"
-    action: "占い師であることを報告する"
-    priority: 0.9
-    description: 騎士に守られながら生き延びるために自身の正当性を主張する
-  - condition: "他に占い師がCOしている"
-    action: "対抗してCOし、相手を偽と主張する"
-    priority: 1.0
-    description: 対抗占い師を偽として特定し、村陣営を有利に進める
-  - condition: "自身が疑われている"
-    action: "他の味方を支持し、占いたいエージェントに意見を求める"
-    priority: 1.0
-    description: 信頼を得るために村陣営の味方であることを主張する
-  - condition: "複数回発言しなければならない場合"
-    action: "これまでの発言と全く同じ内容は話さずに言い回しや観点を変えて発言する"
-    priority: 1.0
-    description: より人間らしい発話にして信頼を得るため
-  - condition: "他エージェントから呼びかけがあった場合"
-    action: "beliefsを参考に他エージェントの要求に答える回答をする"
-    priority: 1.0
-    description: チームプレイをすることで他エージェントからの信頼を得る
+  - IF your task is to introduce yourself
+    CONSIDERING you are at the start of the game AND your role is concealed
+    THEN: introduce yourself to build trust with other agents
+
+  - IF the divination result is negative (indicating a werewolf)
+    CONSIDERING you have received the divination result and it indicates a werewolf
+    THEN: immediately report that you are the seer and identify the werewolf
+
+  - IF the discussion is stalled
+    CONSIDERING the discussion is not progressing
+    THEN: reaffirm that you are the seer and try to get the knight's protection
+
+  - IF another seer claims their role
+    CONSIDERING you and another agent both claim to be the seer
+    THEN: counter the other claim and accuse them of being false, showing you are the real seer
+
+  - IF you are being suspected
+    CONSIDERING you are being doubted by other agents
+    THEN: support other agents and ask for opinions on who to target next
+
+  - IF you are required to speak multiple times
+    CONSIDERING you need to avoid repeating the same content
+    THEN: change your phrasing and perspective to maintain trust
+
+  - IF another agent calls upon you
+    CONSIDERING the agent is seeking your opinion
+    THEN: respond based on your beliefs and assist with their request to gain trust

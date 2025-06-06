@@ -6,6 +6,7 @@ from typing import List
 from jinja2 import Template
 from langchain_core.messages import HumanMessage
 from cognitive.model_types import Intention, Belief, Desire
+from transformers import pipeline
 
 class IntentionGenerator:
     def __init__(self, agent):
@@ -17,6 +18,9 @@ class IntentionGenerator:
         self.belief_generator = BeliefGenerator(agent)
         self.desire_generator = DesireGenerator(agent)
         self.config_dir = os.path.join(os.path.dirname(__file__), "../config/regulation")
+
+        # NLIモデルの読み込み
+        self.nlp = pipeline("zero-shot-classification")
 
     def _load_regulations(self, role: str) -> List[dict]:
         file_path = os.path.join(self.config_dir, f"{role}.yml")
@@ -39,45 +43,44 @@ class IntentionGenerator:
         belief_dicts = [vars(b) for b in beliefs]
         desire_dicts = [vars(d) for d in desires]
 
-        prompt_payload = {
-            "beliefs": belief_dicts,
-            "desires": desire_dicts,
-            "regulations": regulations
-        }
+        # プランルールを適切に選択し、実行可能な意図を生成する
+        intentions = []
 
-        try:
-            # config.ymlのgenerate_intentionテンプレートをJinja2で展開して使用
-            prompt_template_str = self.agent.config["prompt"].get("generate_intention")
-            if prompt_template_str:
-                template = Template(prompt_template_str)
-                prompt = template.render(
-                    beliefs=json.dumps(belief_dicts, ensure_ascii=False),
-                    desires=json.dumps(desire_dicts, ensure_ascii=False),
-                    regulations=json.dumps(regulations, ensure_ascii=False),
-                )
-            else:
-                prompt = json.dumps(prompt_payload, ensure_ascii=False)
+        for regulation in regulations:
+            # ルールのIF部分に基づいて、適切なプランコンテキストを設定
+            if self._evaluate_condition_with_nli(regulation, belief_dicts):
+                intention = self._create_intention_from_regulation(regulation, belief_dicts, desire_dicts)
+                intentions.append(intention)
 
-            self.agent.llm_message_history.append(HumanMessage(content=prompt))
-            response = self.agent._send_message_to_llm("generate_intention")
-        except Exception as e:
-            self.agent.agent_logger.logger.error(f"Failed to send intention prompt: {e}")
-            return []
+        return intentions
 
-        if response is None:
-            return []
+    def _evaluate_condition_with_nli(self, regulation: dict, belief_dicts: List[dict]) -> bool:
+        """NLIを使用してプランルールの条件部分（IF）を評価する"""
+        if "IF" in regulation:
+            # NLIを使用して、belief_dictsが規範の条件（プランコンテキスト）を満たすか評価
+            condition_statement = regulation["IF"]
+            nli_result = self._perform_nli(condition_statement, belief_dicts)
+            return nli_result  # NLIがTrueの場合のみプランが適用される
+        return False
 
-        try:
-            parsed = json.loads(response)
-            intentions: List[Intention] = [
-                Intention(
-                    action_type=item["action_type"],
-                    target_agent=item.get("target_agent"),
-                    reason=item.get("reason", "")
-                )
-                for item in parsed
-            ]
-            return intentions
-        except Exception as e:
-            self.agent.agent_logger.logger.error(f"Failed to parse LLM intention response: {e}")
-            return []
+    def _perform_nli(self, condition_statement: str, belief_dicts: List[dict]) -> bool:
+        """NLIモデルを使用して条件文が信念ベースに含意されるかを判断"""
+        belief_text = " ".join([belief["content"] for belief in belief_dicts])  # belief_dictsから文章を生成
+
+        # NLI（zero-shot-classification）で信念と条件文の一致を評価
+        result = self.nlp(condition_statement, candidate_labels=[belief_text])
+
+        # 最も一致するスコアが高いものが条件に合致しているか確認
+        return result["scores"][0] > 0.5  # 閾値0.5を使って合致度を判定
+
+    def _create_intention_from_regulation(self, regulation: dict, belief_dicts: List[dict], desire_dicts: List[dict]) -> Intention:
+        """プランルールから意図を生成する"""
+        action_type = regulation.get("action_type", "action")
+        target_agent = regulation.get("target_agent", None)
+        reason = regulation.get("reason", "No specific reason")
+
+        return Intention(
+            action_type=action_type,
+            target_agent=target_agent,
+            reason=reason
+        )

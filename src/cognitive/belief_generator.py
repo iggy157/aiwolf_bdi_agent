@@ -1,8 +1,5 @@
 from typing import List
-from jinja2 import Template
 import json
-
-from langchain_core.messages import HumanMessage
 from cognitive.model_types import Belief
 
 class BeliefGenerator:
@@ -11,29 +8,25 @@ class BeliefGenerator:
         assert isinstance(agent, Agent)
         self.agent = agent
 
-    def generate_beliefs(self, game_log: str) -> List[Belief]:
+    def generate_beliefs(self, bdi_data: List[dict]) -> List[Belief]:
         """
-        ゲームログから信念を生成する。
-        game_log: ゲームの進行ログや状況をテキスト形式で渡す。
+        BDI分析結果から信念を生成する（LLMによる要約・再構成あり）。
+        bdi_data: bdi_analysis.pyで生成されたBDI分析データ
         """
-        # config.yml の 'generate_belief' テンプレートを取得・描画する処理例（agent側実装依存）
-        # ここでは自分でテンプレートを取得すると仮定して説明します。
-
-        # 例として、agent.config['prompt']['generate_belief']がある想定
+        # config.ymlのgenerate_beliefテンプレートにbdi_dataを渡す
         prompt_template_str = self.agent.config["prompt"]["generate_belief"]
+        from jinja2 import Template
         template = Template(prompt_template_str)
-        prompt = template.render(game_log=game_log)
+        prompt = template.render(bdi_data=bdi_data)
 
-        # メッセージ履歴にHumanMessageを追加し、LLM呼び出し
-        self.agent.llm_message_history.append(HumanMessage(content=prompt))
-
-        response = self.agent._send_message_to_llm("generate_belief")
+        # LLMを使って信念を整形・生成
+        response = self.agent._send_message_to_llm("generate_belief", prompt)
 
         if response is None:
             return []
 
         try:
-            belief_data = json.loads(response)
+            belief_data = json.loads(response).get("beliefs", [])
             beliefs: List[Belief] = []
             for item in belief_data:
                 belief = Belief(
@@ -41,6 +34,8 @@ class BeliefGenerator:
                     is_alive=item.get("is_alive", True),
                     divined=item.get("divined"),
                     mentioned_by=item.get("mentioned_by", 0),
+                    type=item.get("type", "unknown"),
+                    content=item.get("content", "")
                 )
                 beliefs.append(belief)
             return beliefs

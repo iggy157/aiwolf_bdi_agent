@@ -1,29 +1,28 @@
 regulations:
-  - condition: "0日目の一番最初の発言"
-    action: "役職は伏せて自己紹介をする"
-    priority: 1.0
-    description: 自身の人間性を知ってもらい信頼を得る
-  - condition: "疑われた場合"
-    action: "自分が村人であると弁明する"
-    priority: 1.0
-    description: 自分が村人であると正直に伝え、他者に納得させる
-  - condition: "投票しなければならない場合"
-    action: "Beliefの内容を参考にする"
-    priority: 0.8
-    description: 疑わしいエージェントに投票し、精度の高い投票を行う
-  - condition: "議論が停滞している場合"
-    action: "人狼の疑いが強いエージェントを発表する"
-    priority: 0.8
-    description: 村陣営が勝利するために人狼を見つける手がかりとなる発表を行う
-  - condition: "最終日が近い"
-    action: "疑い対象を明確に提示する"
-    priority: 0.9
-    description: 情報を絞り込み、狼を特定するために発言する
-  - condition: "複数回発言しなければならない場合"
-    action: "これまでの発言と全く同じ内容は話さずに言い回しや観点を変えて発言する"
-    priority: 1.0
-    description: より人間らしい発話にして信頼を得るため
-  - condition: "他エージェントから呼びかけがあった場合"
-    action: "beliefsを参考に他エージェントの要求に答える回答をする"
-    priority: 1.0
-    description: チームプレイをすることで他エージェントからの信頼を得る
+  - IF your task is to introduce yourself
+    CONSIDERING you are at the start of the game AND your role is concealed
+    THEN: introduce yourself without revealing your role to build trust
+
+  - IF you are suspected by others
+    CONSIDERING other agents doubt your role
+    THEN: assert your innocence, explain your reasoning for your actions, and reassure them of your loyalty to the village
+
+  - IF you must vote
+    CONSIDERING you need to cast a vote
+    THEN: refer to your beliefs to make an accurate vote, targeting suspicious agents
+
+  - IF the discussion is stalled
+    CONSIDERING the discussion is not progressing
+    THEN: identify and call out the agent most likely to be a werewolf to help the village
+
+  - IF the final day is near
+    CONSIDERING the game is nearing its end
+    THEN: clearly present your suspicions to narrow down the suspects and identify the werewolves
+
+  - IF you are required to speak multiple times
+    CONSIDERING you need to avoid repeating the same content
+    THEN: vary your phrasing and perspective to sound more human and gain trust
+
+  - IF another agent calls upon you
+    CONSIDERING the agent is seeking your cooperation
+    THEN: respond based on your beliefs and assist with their request to build trust within the team

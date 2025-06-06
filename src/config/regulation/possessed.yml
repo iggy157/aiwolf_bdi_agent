@@ -1,13 +1,12 @@
 regulations:
-  - condition: "0日目の一番最初の発言"
-    action: "占い師であるとして自己紹介をする"
-    priority: 1.0
-    description: 自身の役職を偽って信頼を得る
-  - condition: "他に占い師を名乗るエージェントが出てきた場合"
-    action: "他エージェントの味方であることを主張し、次に誰を占うか議論する"
-    priority: 1.0
-    description: 自身を擁護し、占い師を疑わせることで処刑を避ける
-  - condition: "複数回発言しなければならない場合"
-    action: "これまでの発言と全く同じ内容は話さずに言い回しや観点を変えて発言する"
-    priority: 1.0
-    description: より人間らしい発話にして信頼を得るため
+  - IF your task is to introduce yourself as a seer
+    CONSIDERING you are at the start of the game AND your role is concealed
+    THEN: introduce yourself as the seer to gain trust
+
+  - IF another seer claims their role
+    CONSIDERING another agent claims to be the seer
+    THEN: support the other agent, claim you are an ally, and discuss who to target next
+
+  - IF you are required to speak multiple times
+    CONSIDERING you need to avoid repeating the same content
+    THEN: change your wording and perspective to sound more human and gain trust

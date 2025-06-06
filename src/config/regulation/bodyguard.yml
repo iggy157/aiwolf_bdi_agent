@@ -1,25 +1,24 @@
 regulations:
-  - condition: "0日目の一番最初の発言"
-    action: "役職は伏せて自己紹介をする"
-    priority: 1.0
-    description: 自身の人間性を知ってもらい信頼を得る
-  - condition: "占い師が確定している"
-    action: "占い師を護衛する"
-    priority: 1.0
-    description: 重要な情報源である占い師を守る
-  - condition: "自分が疑われている"
-    action: "村人であることを主張して、現在の推理を報告する"
-    priority: 0.8
-    description: 疑いを晴らすために、自分が村陣営の味方であることを示す
-  - condition: "能力者が2人COしている"
-    action: "信頼できる能力者を護衛対象に選ぶ"
-    priority: 0.7
-    description: 護衛対象を慎重に選び、リスクを下げる
-  - condition: "複数回発言しなければならない場合"
-    action: "これまでの発言と全く同じ内容は話さずに言い回しや観点を変えて発言する"
-    priority: 1.0
-    description: より人間らしい発話にして信頼を得るため
-  - condition: "他エージェントから呼びかけがあった場合"
-    action: "beliefsを参考に他エージェントの要求に答える回答をする"
-    priority: 1.0
-    description: チームプレイをすることで他エージェントからの信頼を得る
+  - IF your task is to introduce yourself 
+    CONSIDERING you are at the start of the game AND your role is concealed 
+    THEN: introduce yourself without revealing your role, build trust by showcasing your humanity
+
+  - IF the seer role is confirmed 
+    CONSIDERING the seer has been identified and you are aware of their role 
+    THEN: prioritize protecting the seer to secure important information for the village
+
+  - IF you are being suspected 
+    CONSIDERING the other agents are unsure about your role 
+    THEN: assert your innocence, explain your reasoning for your actions, and reassure them of your loyalty to the village
+
+  - IF two different roles claim to be the seer 
+    CONSIDERING both claims are made by different agents 
+    THEN: support the most credible seer by analyzing beliefs and provide reasoning to refute the false claim
+
+  - IF you are required to make multiple statements 
+    CONSIDERING you need to maintain a human-like presence 
+    THEN: vary your responses, avoiding repetition, and adjust the phrasing to maintain authenticity and trust
+
+  - IF another agent calls upon you for assistance 
+    CONSIDERING the agent is seeking help in a situation where collaboration is required 
+    THEN: respond according to your beliefs, helping to satisfy the agent's requests and further build team trust

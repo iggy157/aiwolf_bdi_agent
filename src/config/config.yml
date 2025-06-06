@@ -45,29 +45,38 @@ prompt:
     {%- endif %}
 
     あなたのレスポンスはそのままゲーム内に送信されるため、不要な情報を含めないでください。
+  extract_desire: |-
+    発言: {{ statement }}
+    この発言者の願望は何ですか？
+  
+  extract_intention: |-
+    発言: {{ statement }}
+    発言者の願望: {{ desires | tojson }}
+    この発言者の意図は何ですか？
 
   generate_belief: |-
-    ゲームログ情報:
-    {{ game_log|indent(2) }}
-
-    {% if game_log %}
-    ### 解析すべき3要素
-    1. 他エージェントの役職カミングアウト状況
-    2. 占い/霊媒結果
-    3. 生存状況
-
-    ### BDI情報抽出
-    {% raw %}{
+    {% if bdi_data %}
+    ### BDI情報抽出結果
+    {% raw %}
+    {
       "beliefs": [
-        {"type": "attention", "targets": "他エージェントの注目対象分析"},
-        {"type": "request", "targets": "他エージェントの要求分析"},
-        {"type": "strategy", "content": "{{ agent_name }}の提案戦略"}
+        {% for item in bdi_data %}
+        {
+          "agent_id": "{{ item.agent_id }}",
+          "is_alive": "{{ item.is_alive }}",
+          "divined": "{{ item.divined }}",
+          "mentioned_by": "{{ item.mentioned_by }}",
+          "type": "{{ item.type }}",
+          "content": "{{ item.content }}"
+        }
+        {% if not loop.last %},{% endif %}
+        {% endfor %}
       ]
-    }{% endraw %}
+    }
+    {% endraw %}
     {% else %}
     {"beliefs": []}
     {% endif %}
-
 
   generate_desire: |-
     {% if beliefs and instincts %}
@@ -85,7 +94,6 @@ prompt:
     {% else %}
     {"desires": []}
     {% endif %}
-
 
   generate_intention: |-
     {% if beliefs and desires and regulations %}
