@@ -1,6 +1,6 @@
-# aiwolf-nlp-agent-llm
+# aiwolf_bdi_agent
 
-人狼知能コンテスト（自然言語部門） のLLMを用いたサンプルエージェントです。
+LLMを用いたエージェントです。
 
 ## 環境構築
 
