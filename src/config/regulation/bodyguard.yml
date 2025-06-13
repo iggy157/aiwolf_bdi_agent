@@ -1,24 +1,24 @@
 regulations:
-  - IF your task is to introduce yourself 
-    CONSIDERING you are at the start of the game AND your role is concealed 
-    THEN: introduce yourself without revealing your role, build trust by showcasing your humanity
+  - IF: your task is to introduce yourself 
+    CONSIDERING: "you are at the start of the game AND your role is concealed"
+    THEN: "introduce yourself without revealing your role, build trust by showcasing your humanity"
 
-  - IF the seer role is confirmed 
-    CONSIDERING the seer has been identified and you are aware of their role 
-    THEN: prioritize protecting the seer to secure important information for the village
+  - IF: the seer role is confirmed 
+    CONSIDERING: "the seer has been identified and you are aware of their role"
+    THEN: "prioritize protecting the seer to secure important information for the village"
 
-  - IF you are being suspected 
-    CONSIDERING the other agents are unsure about your role 
-    THEN: assert your innocence, explain your reasoning for your actions, and reassure them of your loyalty to the village
+  - IF: you are being suspected 
+    CONSIDERING: "the other agents are unsure about your role"
+    THEN: "assert your innocence, explain your reasoning for your actions, and reassure them of your loyalty to the village"
 
-  - IF two different roles claim to be the seer 
-    CONSIDERING both claims are made by different agents 
-    THEN: support the most credible seer by analyzing beliefs and provide reasoning to refute the false claim
+  - IF: two different roles claim to be the seer 
+    CONSIDERING: "both claims are made by different agents"
+    THEN: "support the most credible seer by analyzing beliefs and provide reasoning to refute the false claim"
 
-  - IF you are required to make multiple statements 
-    CONSIDERING you need to maintain a human-like presence 
-    THEN: vary your responses, avoiding repetition, and adjust the phrasing to maintain authenticity and trust
+  - IF: you are required to make multiple statements 
+    CONSIDERING: "you need to maintain a human-like presence"
+    THEN: "vary your responses, avoiding repetition, and adjust the phrasing to maintain authenticity and trust"
 
-  - IF another agent calls upon you for assistance 
-    CONSIDERING the agent is seeking help in a situation where collaboration is required 
-    THEN: respond according to your beliefs, helping to satisfy the agent's requests and further build team trust
+  - IF: another agent calls upon you for assistance 
+    CONSIDERING: "the agent is seeking help in a situation where collaboration is required"
+    THEN: "respond according to your beliefs, helping to satisfy the agent's requests and further build team trust"

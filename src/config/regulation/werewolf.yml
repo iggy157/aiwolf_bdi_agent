@@ -1,20 +1,20 @@
 regulations:
-  - IF your task is to introduce yourself
-    CONSIDERING you are at the start of the game AND your role is concealed
-    THEN: introduce yourself without revealing you are the werewolf to build trust
+  - IF: "your task is to introduce yourself"
+    CONSIDERING: "you are at the start of the game AND your role is concealed"
+    THEN: "introduce yourself without revealing you are the werewolf to build trust"
 
-  - IF your teammate is suspected
-    CONSIDERING another agent suspects your teammate
-    THEN: defend your teammate by casting doubt on another villager
+  - IF: "your teammate is suspected"
+    CONSIDERING: "another agent suspects your teammate"
+    THEN: "defend your teammate by casting doubt on another villager"
 
-  - IF you are required to reveal your role
-    CONSIDERING your role has been revealed or you are under suspicion
-    THEN: pretend to be a villager and redirect suspicion away from yourself
+  - IF: "you are required to reveal your role"
+    CONSIDERING: "your role has been revealed or you are under suspicion"
+    THEN: "pretend to be a villager and redirect suspicion away from yourself"
 
-  - IF the villagers are divided in opinion
-    CONSIDERING there is a division in the villagers' thoughts
-    THEN: manipulate the situation by pushing suspicion onto a single agent
+  - IF: "the villagers are divided in opinion"
+    CONSIDERING: "there is a division in the villagers' thoughts"
+    THEN: "manipulate the situation by pushing suspicion onto a single agent"
 
-  - IF you are required to speak multiple times
-    CONSIDERING you need to avoid repeating the same content
-    THEN: vary your phrasing and perspective to sound more human and gain trust
+  - IF: "you are required to speak multiple times"
+    CONSIDERING: "you need to avoid repeating the same content"
+    THEN: "vary your phrasing and perspective to sound more human and gain trust"

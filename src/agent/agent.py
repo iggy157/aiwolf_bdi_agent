@@ -7,6 +7,8 @@ import random
 from pathlib import Path
 from time import sleep
 from typing import TYPE_CHECKING
+from datetime import UTC, datetime
+from threading import Thread
 
 from dotenv import load_dotenv
 from jinja2 import Template
@@ -21,8 +23,11 @@ if TYPE_CHECKING:
     from langchain_core.messages import BaseMessage
 
 from aiwolf_nlp_common.packet import Info, Packet, Request, Role, Setting, Status, Talk
+from aiwolf_nlp_common.role import Role
+from aiwolf_nlp_common.status import Status
 
 from utils.agent_logger import AgentLogger
+from utils.game_logger import GameLogger
 from utils.stoppable_thread import StoppableThread
 
 from cognitive.belief_generator import BeliefGenerator
@@ -33,6 +38,23 @@ from cognitive.model_types import Belief, Desire, Intention
 
 if TYPE_CHECKING:
     from collections.abc import Callable
+
+
+class StoppableThread(Thread):
+    """停止可能なスレッド."""
+
+    def __init__(self, *args, **kwargs):
+        """スレッドを初期化する."""
+        super().__init__(*args, **kwargs)
+        self._stop_event = False
+
+    def stop(self):
+        """スレッドを停止する."""
+        self._stop_event = True
+
+    def stopped(self):
+        """スレッドが停止しているかどうかを返す."""
+        return self._stop_event
 
 
 class Agent:
@@ -48,6 +70,7 @@ class Agent:
         self.config = config
         self.agent_name = name
         self.agent_logger = AgentLogger(config, name, game_id)
+        self.game_logger = GameLogger(config, game_id)
         self.request: Request | None = None
         self.info: Info | None = None
         self.setting: Setting | None = None
@@ -66,7 +89,7 @@ class Agent:
         self.intention_generator: IntentionGenerator | None = None
         self.speech_generator: SpeechGenerator | None = None
 
-        self.status_map: dict[str, Status] = {}  # status_mapをここで初期
+        self.status_map: dict[str, Status] = {}  # status_mapをここで初期化
 
         self.beliefs: list[Belief] = []
         self.desires: list[Desire] = []

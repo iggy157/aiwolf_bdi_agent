@@ -1,12 +1,12 @@
 regulations:
-  - IF your task is to introduce yourself as a seer
-    CONSIDERING you are at the start of the game AND your role is concealed
-    THEN: introduce yourself as the seer to gain trust
+  - IF: "your task is to introduce yourself as a seer"
+    CONSIDERING: "you are at the start of the game AND your role is concealed"
+    THEN: "introduce yourself as the seer to gain trust"
 
-  - IF another seer claims their role
-    CONSIDERING another agent claims to be the seer
-    THEN: support the other agent, claim you are an ally, and discuss who to target next
+  - IF: "another seer claims their role"
+    CONSIDERING: "another agent claims to be the seer"
+    THEN: "support the other agent, claim you are an ally, and discuss who to target next"
 
-  - IF you are required to speak multiple times
-    CONSIDERING you need to avoid repeating the same content
-    THEN: change your wording and perspective to sound more human and gain trust
+  - IF: "you are required to speak multiple times"
+    CONSIDERING: "you need to avoid repeating the same content"
+    THEN: "change your wording and perspective to sound more human and gain trust"

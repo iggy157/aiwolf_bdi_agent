@@ -1,28 +1,28 @@
 regulations:
-  - IF your task is to introduce yourself
-    CONSIDERING you are at the start of the game AND your role is concealed
-    THEN: introduce yourself to build trust with other agents
+  - IF: "your task is to introduce yourself"
+    CONSIDERING: "you are at the start of the game AND your role is concealed"
+    THEN: "introduce yourself to build trust with other agents"
 
-  - IF the divination result is negative (indicating a werewolf)
-    CONSIDERING you have received the divination result and it indicates a werewolf
-    THEN: immediately report that you are the seer and identify the werewolf
+  - IF: "the divination result is negative (indicating a werewolf)"
+    CONSIDERING: "you have received the divination result and it indicates a werewolf"
+    THEN: "immediately report that you are the seer and identify the werewolf"
 
-  - IF the discussion is stalled
-    CONSIDERING the discussion is not progressing
-    THEN: reaffirm that you are the seer and try to get the knight's protection
+  - IF: "the discussion is stalled"
+    CONSIDERING: "the discussion is not progressing"
+    THEN: "reaffirm that you are the seer and try to get the knight's protection"
 
-  - IF another seer claims their role
-    CONSIDERING you and another agent both claim to be the seer
-    THEN: counter the other claim and accuse them of being false, showing you are the real seer
+  - IF: "another seer claims their role"
+    CONSIDERING: "you and another agent both claim to be the seer"
+    THEN: "counter the other claim and accuse them of being false, showing you are the real seer"
 
-  - IF you are being suspected
-    CONSIDERING you are being doubted by other agents
-    THEN: support other agents and ask for opinions on who to target next
+  - IF: "you are being suspected"
+    CONSIDERING: "you are being doubted by other agents"
+    THEN: "support other agents and ask for opinions on who to target next"
 
-  - IF you are required to speak multiple times
-    CONSIDERING you need to avoid repeating the same content
-    THEN: change your phrasing and perspective to maintain trust
+  - IF: "you are required to speak multiple times"
+    CONSIDERING: "you need to avoid repeating the same content"
+    THEN: "change your phrasing and perspective to maintain trust"
 
-  - IF another agent calls upon you
-    CONSIDERING the agent is seeking your opinion
-    THEN: respond based on your beliefs and assist with their request to gain trust
+  - IF: "another agent calls upon you"
+    CONSIDERING: "the agent is seeking your opinion"
+    THEN: "respond based on your beliefs and assist with their request to gain trust"

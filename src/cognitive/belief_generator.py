@@ -13,7 +13,7 @@ class BeliefGenerator:
         BDI分析結果から信念を生成する（LLMによる要約・再構成あり）。
         bdi_data: bdi_analysis.pyで生成されたBDI分析データ
         """
-        # config.ymlのgenerate_beliefテンプレートにbdi_dataを渡す
+        # config.ymlの'generate_belief'テンプレートにbdi_dataを渡す
         prompt_template_str = self.agent.config["prompt"]["generate_belief"]
         from jinja2 import Template
         template = Template(prompt_template_str)

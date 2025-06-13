@@ -241,3 +241,19 @@ log:
     vote: true
     attack: true
     finish: false
+
+json_logger:
+  enable: true
+  output_dir: ./log/json
+  filename: "{timestamp}_{teams}"
+
+game_logger:
+  enable: true
+  output_dir: ./log/game
+  filename: "{timestamp}_{teams}"
+
+realtime_broadcaster:
+  enable: true
+  delay: 5s
+  output_dir: ./log/realtime
+  filename: "{timestamp}_{teams}"

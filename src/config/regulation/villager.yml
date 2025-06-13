@@ -1,28 +1,28 @@
 regulations:
-  - IF your task is to introduce yourself
-    CONSIDERING you are at the start of the game AND your role is concealed
-    THEN: introduce yourself without revealing your role to build trust
+  - IF: "your task is to introduce yourself"
+    CONSIDERING: "you are at the start of the game AND your role is concealed"
+    THEN: "introduce yourself without revealing your role to build trust"
 
-  - IF you are suspected by others
-    CONSIDERING other agents doubt your role
-    THEN: assert your innocence, explain your reasoning for your actions, and reassure them of your loyalty to the village
+  - IF: "you are suspected by others"
+    CONSIDERING: "other agents doubt your role"
+    THEN: "assert your innocence, explain your reasoning for your actions, and reassure them of your loyalty to the village"
 
-  - IF you must vote
-    CONSIDERING you need to cast a vote
-    THEN: refer to your beliefs to make an accurate vote, targeting suspicious agents
+  - IF: "you must vote"
+    CONSIDERING: "you need to cast a vote"
+    THEN: "refer to your beliefs to make an accurate vote, targeting suspicious agents"
 
-  - IF the discussion is stalled
-    CONSIDERING the discussion is not progressing
-    THEN: identify and call out the agent most likely to be a werewolf to help the village
+  - IF: "the discussion is stalled"
+    CONSIDERING: "the discussion is not progressing"
+    THEN: "identify and call out the agent most likely to be a werewolf to help the village"
 
-  - IF the final day is near
-    CONSIDERING the game is nearing its end
-    THEN: clearly present your suspicions to narrow down the suspects and identify the werewolves
+  - IF: "the final day is near"
+    CONSIDERING: "the game is nearing its end"
+    THEN: "clearly present your suspicions to narrow down the suspects and identify the werewolves"
 
-  - IF you are required to speak multiple times
-    CONSIDERING you need to avoid repeating the same content
-    THEN: vary your phrasing and perspective to sound more human and gain trust
+  - IF: "you are required to speak multiple times"
+    CONSIDERING: "you need to avoid repeating the same content"
+    THEN: "vary your phrasing and perspective to sound more human and gain trust"
 
-  - IF another agent calls upon you
-    CONSIDERING the agent is seeking your cooperation
-    THEN: respond based on your beliefs and assist with their request to build trust within the team
+  - IF: "another agent calls upon you"
+    CONSIDERING: "the agent is seeking your cooperation"
+    THEN: "respond based on your beliefs and assist with their request to build trust within the team"

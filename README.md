@@ -8,8 +8,8 @@ LLMを用いたエージェントです。
 > Python 3.11以上が必要です。
 
 ```bash
-git clone https://github.com/aiwolfdial/aiwolf-nlp-agent-llm.git
-cd aiwolf-nlp-agent-llm
+git clone https://github.com/iggy157/aiwolf_bdi_agent
+cd aiwolf_bdi_agent
 cp config/config.yml.example config/config.yml
 cp config/.env.example config/.env
 python -m venv .venv
